@@ -19,8 +19,8 @@ class RoleSeeder extends Seeder
                 'is_active' => true,
             ],
             [
-                'name' => 'HR',
-                'description' => 'HR personnel with employee and attendance management privileges',
+                'name' => 'HR Manager',
+                'description' => 'Human Resources Manager with employee management access',
                 'is_active' => true,
             ],
             [
@@ -28,10 +28,29 @@ class RoleSeeder extends Seeder
                 'description' => 'Regular employee with limited access',
                 'is_active' => true,
             ],
+            [
+                'name' => 'Department Head',
+                'description' => 'Manager of a specific department',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Supervisor',
+                'description' => 'Team supervisor with attendance approval privileges',
+                'is_active' => true,
+            ],
         ];
 
-        foreach ($roles as $role) {
-            Role::create($role);
+        foreach ($roles as $roleData) {
+            // Check if role already exists before creating it
+            $existingRole = Role::where('name', $roleData['name'])->first();
+            
+            if (!$existingRole) {
+                Role::create($roleData);
+            } else {
+                // Optionally update existing role if needed
+                // $existingRole->update(['description' => $roleData['description'], 'is_active' => $roleData['is_active']]);
+                $this->command->info("Role '{$roleData['name']}' already exists, skipping.");
+            }
         }
     }
 }

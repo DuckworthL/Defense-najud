@@ -19,29 +19,38 @@ class DepartmentSeeder extends Seeder
                 'is_active' => true,
             ],
             [
+                'name' => 'Information Technology',
+                'description' => 'IT support and development',
+                'is_active' => true,
+            ],
+            [
                 'name' => 'Human Resources',
-                'description' => 'HR department',
+                'description' => 'HR management and recruitment',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Marketing',
+                'description' => 'Marketing and promotional activities',
                 'is_active' => true,
             ],
             [
                 'name' => 'Finance',
-                'description' => 'Finance and accounting department',
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Information Technology',
-                'description' => 'IT department',
-                'is_active' => true,
-            ],
-            [
-                'name' => 'Facilities',
-                'description' => 'Facilities management',
+                'description' => 'Accounts and financial management',
                 'is_active' => true,
             ],
         ];
 
-        foreach ($departments as $department) {
-            Department::create($department);
+        foreach ($departments as $deptData) {
+            // Check if department already exists before creating it
+            $existingDept = Department::where('name', $deptData['name'])->first();
+            
+            if (!$existingDept) {
+                Department::create($deptData);
+            } else {
+                // Optionally update existing department if needed
+                // $existingDept->update(['description' => $deptData['description'], 'is_active' => $deptData['is_active']]);
+                $this->command->info("Department '{$deptData['name']}' already exists, skipping.");
+            }
         }
     }
 }

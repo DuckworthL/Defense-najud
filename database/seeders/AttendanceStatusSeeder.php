@@ -50,8 +50,20 @@ class AttendanceStatusSeeder extends Seeder
             ],
         ];
 
-        foreach ($statuses as $status) {
-            AttendanceStatus::create($status);
+        foreach ($statuses as $statusData) {
+            // Check if the status already exists before creating it
+            $existingStatus = AttendanceStatus::where('name', $statusData['name'])->first();
+            
+            if (!$existingStatus) {
+                AttendanceStatus::create($statusData);
+            } else {
+                // Optionally update existing status if needed
+                // $existingStatus->update([
+                //     'description' => $statusData['description'], 
+                //     'color_code' => $statusData['color_code']
+                // ]);
+                $this->command->info("Attendance Status '{$statusData['name']}' already exists, skipping.");
+            }
         }
     }
 }
